@@ -1,28 +1,20 @@
 pipeline {
-    agent none
-
-    environment {
+    agent none 
+     environment {
         DOCKER_HOST = 'tcp://localhost:2375'
     }
-
     stages {
-        stage('Build') {
+        stage('Build') { 
             agent {
                 docker {
-                    image 'myjenkins-blueocean:2.426.1-1'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    image 'python:3.12.0-alpine3.18' 
                 }
             }
             steps {
-                script {
-                    docker.image('python:3.12.0-alpine3.18').inside {
-                        sh 'python -m py_compile sources/add2vals.py sources/calc.py'
-                        stash(name: 'compiled-results', includes: 'sources/*.py*')
-                    }
-                }
+                sh 'python -m py_compile sources/add2vals.py sources/calc.py' 
+                stash(name: 'compiled-results', includes: 'sources/*.py*') 
             }
         }
-
         stage('Test') {
             agent {
                 docker {
