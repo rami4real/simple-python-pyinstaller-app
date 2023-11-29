@@ -8,8 +8,9 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                docker.image('myjenkins-blueocean:2.426.1-1').withRun('-v /var/run/docker.sock:/var/run/docker.sock') {
-                    // Your build steps here
+                docker {
+                    image 'myjenkins-blueocean:2.426.1-1'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                 }
             }
             steps {
